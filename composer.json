@@ -1,0 +1,23 @@
+{
+    "name": "spress/spress-import",
+    "type": "spress-plugin",
+    "description": "A plugin for importing from various blog platform to Spress",
+    "keywords": ["spress", "plugin"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Victor Puertas",
+            "email": "vpgugr@gmail.com"
+        }
+    ],
+    "require": {
+        "spress/spress-installer": "2.0.*",
+        "symfony/filesystem": "2.7.*",
+        "symfony/yaml": "2.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spress\\Import\\": "src/"
+        }
+    }
+}
