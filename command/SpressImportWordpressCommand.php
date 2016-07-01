@@ -1,5 +1,6 @@
 <?php
 
+use Spress\Import\ProviderCollection;
 use Spress\Import\ProviderManager;
 use Spress\Import\Provider\WxrProvider;
 use Yosymfony\Spress\Core\IO\IOInterface;
@@ -37,13 +38,17 @@ class SpressImportWordpressCommand extends CommandPlugin
     public function executeCommand(IOInterface $io, array $arguments, array $options)
     {
         $file = $arguments['file'];
-        $srcDir = __DIR__.'/../../../';
-        $providerManager = new ProviderManager([
-            'wxr' => new WxrProvider(),
-        ], $srcPath);
+        $srcPath = __DIR__.'/../../../';
 
-        if (isset($options['dry-run'])) {
+        $providerCollection = new ProviderCollection([
+            'wxr' => new WxrProvider(),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $srcPath);
+
+        if ($options['dry-run'] == true) {
             $providerManager->enableDryRun();
+
+            $io->write('dry-run: enabled');
         }
 
         $itemResults = $providerManager->import('wxr', [
