@@ -187,7 +187,7 @@ class ProviderManager
         $attributes['source_permalink'] = $item->getPermalink();
 
         if (empty($item->getTitle()) == false) {
-            $attributes['title'] = $item->getContent();
+            $attributes['title'] = $item->getTitle();
         }
 
         $yamlContent = Yaml::dump($attributes);
