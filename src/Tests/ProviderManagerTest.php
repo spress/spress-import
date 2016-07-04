@@ -135,4 +135,61 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $itemResults);
         $this->assertFileExists($this->srcPath.'/content/posts/2016-06-29-hello-world.html');
     }
+
+    public function testLayoutPost()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'post',
+                    'permalink' => 'http://mysite.com/posts/hello-world',
+                    'date' => '2016-06-29',
+                    'title' => 'Hello world',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $providerManager->setPostLayout('default');
+        $itemResults = $providerManager->import('array', []);
+
+        $itemResult = $itemResults[0];
+        $content = <<<EOC
+---
+source_permalink: 'http://mysite.com/posts/hello-world'
+layout: default
+title: 'Hello world'
+
+---
+
+EOC;
+        $this->assertEquals($content, $itemResult->getContent());
+    }
+
+    public function testLayoutPage()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/about',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $providerManager->setPageLayout('page');
+        $itemResults = $providerManager->import('array', []);
+
+        $itemResult = $itemResults[0];
+        $content = <<<EOC
+---
+source_permalink: 'http://mysite.com/about'
+layout: page
+
+---
+
+EOC;
+        $this->assertEquals($content, $itemResult->getContent());
+    }
 }

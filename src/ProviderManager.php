@@ -24,6 +24,8 @@ use Symfony\Component\Filesystem\Filesystem;
 class ProviderManager
 {
     protected $dryRun = false;
+    protected $layoutPage;
+    protected $layoutPost;
     protected $assetsPath;
     protected $srcPath;
     protected $providerCollection;
@@ -49,6 +51,26 @@ class ProviderManager
     public function enableDryRun()
     {
         $this->dryRun = true;
+    }
+
+    /**
+     * Sets the layout for page items.
+     *
+     * @param string $layoutName The layout. e.g: "default" or "pages/default".
+     */
+    public function setPageLayout($layoutName)
+    {
+        $this->layoutPage = $layoutName;
+    }
+
+    /**
+     * Sets the layout for post items.
+     *
+     * @param string $layoutName The layout. e.g: "default" or "blog/post".
+     */
+    public function setPostLayout($layoutName)
+    {
+        $this->layoutPost = $layoutName;
     }
 
     /**
@@ -185,6 +207,19 @@ class ProviderManager
     {
         $attributes = $item->getAttributes();
         $attributes['source_permalink'] = $item->getPermalink();
+
+        switch ($item->getType()) {
+            case Item::TYPE_POST:
+                if (empty($this->layoutPost) == false) {
+                    $attributes['layout'] = $this->layoutPost;
+                }
+                break;
+            case Item::TYPE_PAGE:
+                if (empty($this->layoutPage) == false) {
+                    $attributes['layout'] = $this->layoutPage;
+                }
+                break;
+        }
 
         if (empty($item->getTitle()) == false) {
             $attributes['title'] = $item->getTitle();
