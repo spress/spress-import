@@ -22,6 +22,8 @@ class SpressImportWordpressCommand extends CommandPlugin
 
         $definition->addArgument('file', CommandDefinition::REQUIRED, 'Path to WXR file');
         $definition->addOption('dry-run', null, null);
+        $definition->addOption('post-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for post items');
+        $definition->addOption('page-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for page items');
 
         return $definition;
     }
@@ -47,8 +49,17 @@ class SpressImportWordpressCommand extends CommandPlugin
 
         if ($options['dry-run'] == true) {
             $providerManager->enableDryRun();
-
             $io->write('dry-run: enabled');
+        }
+
+        if (is_null($options['post-layout']) == false) {
+            $providerManager->setPostLayout($options['post-layout']);
+            $io->write(sprintf('Posts layout: "%s"', $options['post-layout']));
+        }
+
+        if (is_null($options['page-layout']) == false) {
+            $providerManager->setPageLayout($options['page-layout']);
+            $io->write(sprintf('Pages layout: "%s"', $options['page-layout']));
         }
 
         $itemResults = $providerManager->import('wxr', [
