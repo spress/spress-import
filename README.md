@@ -1,10 +1,10 @@
-Import plugins for Spress
-=========================
+Import plugin for Spress
+========================
 [![Build Status](https://travis-ci.org/spress/Spress-import.svg?branch=master)](https://travis-ci.org/spress/Spress-import)
 
-This plugins let you import posts and pages from others platforms to a Spress site.
+This plugin let you import posts and pages from others platforms to a Spress site.
 
-**Note**: this plugins is in a early stage. This means that its behaviour could change
+**Note**: this plugin is in a early stage. This means that its behaviour could change
 frecuenly without notice until it reaches a stable version.
 
 ## Platforms supported
@@ -17,8 +17,8 @@ frecuenly without notice until it reaches a stable version.
 
 ## How to install?
 1. Go to `your-spress-site/` folder.
-2. Run `composer require spress/spress-import:@dev` (Composer tool is necessary).
-3. When you run `spress` command, import commands will appears under `import` namespace.
+2. Run `composer require spress/spress-import:@dev`.
+3. When you run `spress` command, import commands will be displayed under `import` namespace.
 
 ## How to use?
 See the concrete provider.
