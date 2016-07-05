@@ -31,16 +31,19 @@ class SpressImportWordpressCommand extends CommandPlugin
     /**
      * Executes the current command.
      *
-     * @param \Yosymfony\Spress\Core\IO\IOInterface $io Input/output interface.
-     * @param array $arguments Arguments passed to the command.
-     * @param array $options Options passed to the command.
+     * @param \Yosymfony\Spress\Core\IO\IOInterface $io        Input/output interface.
+     * @param array                                 $arguments Arguments passed to the command.
+     * @param array                                 $options   Options passed to the command.
      *
      * @return null|int null or 0 if everything went fine, or an error code.
      */
     public function executeCommand(IOInterface $io, array $arguments, array $options)
     {
+        $style = new SpressImportConsoleStyle($io);
         $file = $arguments['file'];
         $srcPath = __DIR__.'/../../../';
+
+        $style->title('Importing from Wordpress WXR file');
 
         $providerCollection = new ProviderCollection([
             'wxr' => new WxrProvider(),
@@ -49,22 +52,21 @@ class SpressImportWordpressCommand extends CommandPlugin
 
         if ($options['dry-run'] == true) {
             $providerManager->enableDryRun();
-            $io->write('dry-run: enabled');
         }
 
         if (is_null($options['post-layout']) == false) {
             $providerManager->setPostLayout($options['post-layout']);
-            $io->write(sprintf('Posts layout: "%s"', $options['post-layout']));
         }
 
         if (is_null($options['page-layout']) == false) {
             $providerManager->setPageLayout($options['page-layout']);
-            $io->write(sprintf('Pages layout: "%s"', $options['page-layout']));
         }
 
         $itemResults = $providerManager->import('wxr', [
             'file' => $file,
         ]);
+
+        $style->ResultItems($itemResults);
     }
 
     /**
