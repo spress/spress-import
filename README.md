@@ -4,7 +4,7 @@ Import plugin for Spress
 
 This plugin let you import posts and pages from others platforms to a Spress site.
 
-**Note**: this plugin is in a early stage. This means that its behaviour could change
+**Note**: this plugin is in a early stage. That means that its behaviour could change
 frecuenly without notice until it reaches a stable version.
 
 ## Platforms supported
