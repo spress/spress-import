@@ -192,4 +192,62 @@ layout: page
 EOC;
         $this->assertEquals($content, $itemResult->getContent());
     }
+
+    public function testFetchImagen()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'resource',
+                    'permalink' => 'https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg',
+                ],
+            ]),
+        ]);
+        $assetsPath = $this->srcPath.'/img';
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
+        $providerManager->enableDryRun();
+        $providerManager->fetchResources();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+        $this->assertEquals('2016/06/14004361452_b952deddeb_o.jpg', $itemResults[0]->getRelativePath());
+    }
+
+    public function testWriteImagen()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'resource',
+                    'permalink' => 'https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg',
+                ],
+            ]),
+        ]);
+        $assetsPath = '/img';
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
+        $providerManager->fetchResources();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+        $this->assertFileExists($this->srcPath.'/img/2016/06/14004361452_b952deddeb_o.jpg');
+    }
+
+    public function testImagenNotFound()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'resource',
+                    'permalink' => 'https://spressimport.files.wordpress.com/image-not-found.png',
+                ],
+            ]),
+        ]);
+        $assetsPath = '/img';
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
+        $providerManager->fetchResources();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+        $this->assertTrue($itemResults[0]->hasError());
+    }
 }

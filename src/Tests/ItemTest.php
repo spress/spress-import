@@ -58,4 +58,19 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($attributes, $item->getAttributes());
     }
+
+    public function testGetFetchPermalink()
+    {
+        $item = new Item(Item::TYPE_RESOURCE, '/example.png');
+
+        $this->assertTrue($item->getFetchPermalink());
+    }
+
+    public function testSetFetchPermalink()
+    {
+        $item = new Item(Item::TYPE_RESOURCE, '/example.png');
+        $item->setFetchPermalink(false);
+
+        $this->assertFalse($item->getFetchPermalink());
+    }
 }

@@ -27,9 +27,10 @@ class Item
     private $permalink;
     private $attributes = [];
     private $content;
+    private $fetchPermalink = true;
 
     /**
-     * Constructor.
+     * Constructor. `getFetchPermalink` method returns true by defatult.
      *
      * @param string $type      Type of item (page, post or resource).
      * @param string $permalink Permalink of the item. This value acts as identifier
@@ -75,6 +76,8 @@ class Item
 
     /**
      * Gets the permalink of the item.
+     * If the item type is "resource" and getFetchPermalink method returns true,
+     * this value will be use to fetch the resource (e.g: a image).
      *
      * @return string
      */
@@ -142,6 +145,28 @@ class Item
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * Sets if fetch the resource using permalink in case of
+     * resource item type.
+     *
+     * @param bool $value
+     */
+    public function setFetchPermalink($value)
+    {
+        $this->fetchPermalink = $value;
+    }
+
+    /**
+     * Gets if fetch the resource using permalink in case of
+     * resource item type.
+     *
+     * @return bool
+     */
+    public function getFetchPermalink()
+    {
+        return $this->fetchPermalink;
     }
 
     public function __toString()
