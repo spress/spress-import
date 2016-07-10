@@ -289,8 +289,6 @@ class ProviderManager
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 Spress-import plugin');
         $result = curl_exec($ch);
@@ -298,7 +296,7 @@ class ProviderManager
         curl_close($ch);
 
         if ($resultcode != 200) {
-            throw new \RuntimeException(sprintf('Requested resource responded with code: %d.', $resultcode));
+            throw new \RuntimeException(sprintf('Requested resource responded with a code: %d.', $resultcode));
         }
 
         return $result;
