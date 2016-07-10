@@ -65,8 +65,13 @@ class WxrProvider implements ProviderInterface
             $wp = $item->children($this->namespaces['wp']);
             $content = $item->children('http://purl.org/rss/1.0/modules/content/');
             $excerpt = $item->children($this->namespaces['excerpt']);
+            $permalink = (string) $item->link;
 
-            $importedItem = $this->makeItem($wp, (string) $item->link);
+            if ((string) $wp->post_type == 'attachment') {
+                $permalink = $wp->attachment_url;
+            }
+
+            $importedItem = $this->makeItem($wp, (string) $permalink);
             $importedItem->setTitle((string) $item->title);
             $importedItem->setContent((string) $content->encoded);
             $importedItem->setDate(new \DateTime((string) $wp->post_date_gmt));

@@ -57,7 +57,7 @@ class SpressImportWordpressCommand extends CommandPlugin
             $providerManager->enableDryRun();
         }
 
-        if ($Options['fetch-images'] == true) {
+        if ($options['fetch-images'] == true) {
             $providerManager->fetchResources();
         }
 

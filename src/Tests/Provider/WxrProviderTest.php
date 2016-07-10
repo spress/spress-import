@@ -84,7 +84,7 @@ class WxrProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Item::TYPE_RESOURCE, $items[3]->getType());
         $this->assertEquals('Colorado Farming', $items[3]->getTitle());
         $this->assertEquals('', $items[3]->getContent());
-        $this->assertEquals('https://spressimport.wordpress.com/2016/06/21/hello-with-photo/colorado-farming/', $items[3]->getPermalink());
+        $this->assertEquals('https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg', $items[3]->getPermalink());
         $this->assertNotEmpty($items[3]->getAttributes()['excerpt']);
     }
 }
