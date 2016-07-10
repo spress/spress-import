@@ -24,6 +24,8 @@ class SpressImportWordpressCommand extends CommandPlugin
         $definition->addOption('dry-run', null, null);
         $definition->addOption('post-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for post items');
         $definition->addOption('page-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for page items');
+        $definition->addOption('fetch-images', null, null, 'Fetch images used by the blog');
+        $definition->addOption('assets-dir', null, CommandDefinition::VALUE_REQUIRED, 'Directory for storing the fetched images', 'assets');
 
         return $definition;
     }
@@ -48,10 +50,15 @@ class SpressImportWordpressCommand extends CommandPlugin
         $providerCollection = new ProviderCollection([
             'wxr' => new WxrProvider(),
         ]);
-        $providerManager = new ProviderManager($providerCollection, $srcPath);
+        $assetsDir = $options['assets-dir'];
+        $providerManager = new ProviderManager($providerCollection, $srcPath, $assetsDir);
 
         if ($options['dry-run'] == true) {
             $providerManager->enableDryRun();
+        }
+
+        if ($Options['fetch-images'] == true) {
+            $providerManager->fetchResources();
         }
 
         if (is_null($options['post-layout']) == false) {
