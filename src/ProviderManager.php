@@ -217,7 +217,7 @@ class ProviderManager
         $baseName = basename($urlPath);
         $baseNameLength = strlen($baseName.'/');
         $pathWithoutBase = substr_replace($urlPath, '', -$baseNameLength, $baseNameLength);
-        $relativePath = $this->sanitizePath($pathWithoutBase.'/'.$baseName);
+        $relativePath = $this->assetsPath.'/'.$this->sanitizePath($pathWithoutBase.'/'.$baseName);
 
         $fileExists = file_exists($this->getSrcPath($relativePath));
 
@@ -235,7 +235,7 @@ class ProviderManager
         }
 
         $fs = new Filesystem();
-        $fs->dumpFile($this->getSrcPath($this->assetsPath.'/'.$relativePath), $binaryContent);
+        $fs->dumpFile($this->getSrcPath($relativePath), $binaryContent);
 
         return $resultItem;
     }

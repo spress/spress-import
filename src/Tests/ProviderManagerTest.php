@@ -203,14 +203,14 @@ EOC;
                 ],
             ]),
         ]);
-        $assetsPath = $this->srcPath.'/img';
+        $assetsPath = 'img';
         $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
         $providerManager->enableDryRun();
         $providerManager->fetchResources();
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(1, $itemResults);
-        $this->assertEquals('2016/06/14004361452_b952deddeb_o.jpg', $itemResults[0]->getRelativePath());
+        $this->assertEquals('img/2016/06/14004361452_b952deddeb_o.jpg', $itemResults[0]->getRelativePath());
     }
 
     public function testWriteImagen()
