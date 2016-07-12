@@ -27,9 +27,9 @@ class Str
      *
      * @return string
      */
-    public static function slug($value, $separator = '-')
+    public static function slug($str, $separator = '-')
     {
-        $str = self::toAscii($value);
+        $str = self::toAscii($str);
 
         $flip = $separator == '-' ? '_' : '-';
         $str = str_replace('.', $separator, $str);
@@ -41,16 +41,75 @@ class Str
     }
 
     /**
+     * Determine if a the string starts with a given substring.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    public static function startWith($str, $value)
+    {
+        return $value != '' && strpos($str, $value) === 0;
+    }
+
+    /**
+     * Determine if a the string ends with a given substring.
+     *
+     * @param string $str   The string in which finds the sufix.
+     * @param string $value
+     *
+     * @return bool
+     */
+    public static function endWith($str, $value)
+    {
+        return (string) $value === substr($str, -strlen($value));
+    }
+
+    /**
+     * Deletes a prefix of the string.
+     *
+     * @param string $str    The string in which finds the prefix.
+     * @param string $prefix The prefix.
+     *
+     * @return string The string without prefix.
+     */
+    public static function deletePrefix($str, $prefix)
+    {
+        if (self::startWith($str, $prefix) === true) {
+            return substr($str, strlen($prefix));
+        }
+
+        return $str;
+    }
+
+    /**
+     * Deletes a sufix of the string.
+     *
+     * @param string $str   The string in which finds the sufix.
+     * @param string $sufix The sufix.
+     *
+     * @return string The string without sufix.
+     */
+    public static function deleteSufix($str, $sufix)
+    {
+        if (self::endWith($str, $sufix) === true) {
+            return substr($str, 0, -strlen($sufix));
+        }
+
+        return $str;
+    }
+
+    /**
      * Transliterate a UTF-8 value to ASCII.
      *
-     * @param bool $removeUnsupported Whether or not to remove the
-     *                                unsupported characters
+     * @param string $str               The string to performs.
+     * @param bool   $removeUnsupported Whether or not to remove the
+     *                                  unsupported characters
      *
      * @return string
      */
-    public static function toAscii($value, $removeUnsupported = true)
+    public static function toAscii($str, $removeUnsupported = true)
     {
-        $str = $value;
         foreach (self::getChars() as $key => $value) {
             $str = str_replace($value, $key, $str);
         }
