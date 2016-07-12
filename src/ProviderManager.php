@@ -113,14 +113,16 @@ class ProviderManager
 
         foreach ($items as $item) {
             try {
-                if (is_null($resultItem = $this->processItem($item)) == false) {
-                    $impotedItems[] = $resultItem;
-                }
+                $resultItem = $this->processItem($item);
             } catch (\Exception $e) {
                 $resultItem = new ResultItem($item->getPermalink());
                 $resultItem->setHasError(true);
                 $resultItem->setMessage($e->getMessage());
+            }
+
+            if (is_null($resultItem) == false) {
                 $impotedItems[] = $resultItem;
+                $this->dumpResultItem($resultItem);
             }
         }
 
@@ -165,13 +167,6 @@ class ProviderManager
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
 
-        if ($this->dryRun == true) {
-            return $resultItem;
-        }
-
-        $fs = new Filesystem();
-        $fs->dumpFile($this->getSrcPath($relativePath), $spressContent);
-
         return $resultItem;
     }
 
@@ -195,13 +190,6 @@ class ProviderManager
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
 
-        if ($this->dryRun == true) {
-            return $resultItem;
-        }
-
-        $fs = new Filesystem();
-        $fs->dumpFile($this->getSrcPath($relativePath), $spressContent);
-
         return $resultItem;
     }
 
@@ -220,22 +208,14 @@ class ProviderManager
         $relativePath = $this->assetsPath.'/'.$this->sanitizePath($pathWithoutBase.'/'.$baseName);
 
         $fileExists = file_exists($this->getSrcPath($relativePath));
-
-        $resultItem = new ResultItem($item->getPermalink(), null, $fileExists);
-        $resultItem->setRelativePath($relativePath);
-
         $binaryContent = $item->getContent();
 
         if ($item->getFetchPermalink() == true) {
             $binaryContent = $this->downloadResource($item->getPermalink());
         }
 
-        if ($this->dryRun == true) {
-            return $resultItem;
-        }
-
-        $fs = new Filesystem();
-        $fs->dumpFile($this->getSrcPath($relativePath), $binaryContent);
+        $resultItem = new ResultItem($item->getPermalink(), $binaryContent, $fileExists);
+        $resultItem->setRelativePath($relativePath);
 
         return $resultItem;
     }
@@ -253,6 +233,16 @@ class ProviderManager
     protected function getSrcPath($relativePath)
     {
         return $this->srcPath.'/'.$relativePath;
+    }
+
+    protected function dumpResultItem(ResultItem $resultItem)
+    {
+        if ($this->dryRun == true || $resultItem->hasError() == true) {
+            return;
+        }
+
+        $fs = new Filesystem();
+        $fs->dumpFile($this->getSrcPath($resultItem->getRelativePath()), $resultItem->getContent());
     }
 
     protected function getSpressContent(Item $item)
