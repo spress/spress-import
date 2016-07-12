@@ -25,23 +25,27 @@ class ProviderManager
 {
     protected $dryRun = false;
     protected $enableFetchResources = false;
+    protected $replaceResources = true;
     protected $layoutPage;
     protected $layoutPost;
     protected $assetsPath;
     protected $srcPath;
     protected $providerCollection;
+    protected $impotedItems = [];
+    protected $resourceItems = [];
+    protected $postAndPageItems = [];
 
     /**
      * Constructor.
      *
      * @param ProviderCollection $collection Collection of providers.
      * @param string             $srcPath    Path to the src folder. e.g: "/site/src".
-     * @param string             $assetsPath Relative path to path indicated in $srcPath to store the assets. e.g: "/assets"
+     * @param string             $assetsPath Relative path to `$srcPath/content` for storing the assets. e.g: "assets"
      */
     public function __construct(ProviderCollection $collection, $srcPath, $assetsPath = null)
     {
         $this->srcPath = $srcPath;
-        $this->assetsPath = $assetsPath;
+        $this->assetsPath = $this->sanitizePath('content/'.$assetsPath);
         $this->providerCollection = $collection;
     }
 
@@ -65,6 +69,17 @@ class ProviderManager
         }
 
         $this->enableFetchResources = true;
+    }
+
+    /**
+     * Avoids to replace the URLs matched the fetched resources by local resources.
+     * This option only has effect if fetch resources feature is enabled.
+     *
+     * @See fetchResources
+     */
+    public function DoNotReplaceResources()
+    {
+        $this->replaceResources = false;
     }
 
     /**
@@ -100,16 +115,18 @@ class ProviderManager
         $provider = $this->providerCollection->get($providerName);
         $provider->setUp($options);
 
-        $filesCreated = $this->processItems($provider->getItems());
+        $this->processItems($provider->getItems());
 
         $provider->tearDown();
 
-        return $filesCreated;
+        return $this->impotedItems;
     }
 
     protected function processItems(array $items)
     {
-        $impotedItems = [];
+        $this->impotedItems = [];
+        $this->resourceItems = [];
+        $this->postAndPageItems = [];
 
         foreach ($items as $item) {
             try {
@@ -120,13 +137,15 @@ class ProviderManager
                 $resultItem->setMessage($e->getMessage());
             }
 
+            if ($this->replaceResources == true) {
+                $this->replaceUrlResourcePostAndPages();
+            }
+
             if (is_null($resultItem) == false) {
-                $impotedItems[] = $resultItem;
+                $this->impotedItems[] = $resultItem;
                 $this->dumpResultItem($resultItem);
             }
         }
-
-        return $impotedItems;
     }
 
     protected function processItem(Item $item)
@@ -166,6 +185,7 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
+        $this->postAndPageItems[] = $resultItem;
 
         return $resultItem;
     }
@@ -189,6 +209,7 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
+        $this->postAndPageItems[] = $resultItem;
 
         return $resultItem;
     }
@@ -216,8 +237,25 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $binaryContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
+        $this->resourceItems[] = $resultItem;
 
         return $resultItem;
+    }
+
+    protected function replaceUrlResourcePostAndPages()
+    {
+        $urlsSourcePermalinks = [];
+        $urlLocal = [];
+
+        foreach ($this->resourceItems as $resultItem) {
+            $urlsSourcePermalinks[] = $resultItem->getSourcePermalink();
+            $urlLocal[] = Str::deletePrefix($resultItem->getRelativePath(), 'content');
+        }
+
+        foreach ($this->postAndPageItems as $resultItem) {
+            $content = $resultItem->getContent();
+            $resultItem->setContent(str_replace($urlsSourcePermalinks, $urlLocal, $content));
+        }
     }
 
     protected function normalizePath($url)

@@ -25,7 +25,7 @@ class SpressImportWordpressCommand extends CommandPlugin
         $definition->addOption('post-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for post items');
         $definition->addOption('page-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for page items');
         $definition->addOption('fetch-images', null, null, 'Fetch images used by the blog');
-        $definition->addOption('assets-dir', null, CommandDefinition::VALUE_REQUIRED, 'Directory for storing the fetched images', 'content/assets');
+        $definition->addOption('assets-dir', null, CommandDefinition::VALUE_REQUIRED, 'Relative directory to content folder for storing the fetched images', 'assets');
 
         return $definition;
     }

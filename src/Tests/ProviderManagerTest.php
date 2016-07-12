@@ -210,7 +210,7 @@ EOC;
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(1, $itemResults);
-        $this->assertEquals('img/2016/06/14004361452_b952deddeb_o.jpg', $itemResults[0]->getRelativePath());
+        $this->assertEquals('content/img/2016/06/14004361452_b952deddeb_o.jpg', $itemResults[0]->getRelativePath());
     }
 
     public function testWriteImagen()
@@ -229,7 +229,7 @@ EOC;
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(1, $itemResults);
-        $this->assertFileExists($this->srcPath.'/img/2016/06/14004361452_b952deddeb_o.jpg');
+        $this->assertFileExists($this->srcPath.'/content/img/2016/06/14004361452_b952deddeb_o.jpg');
     }
 
     public function testImagenNotFound()
@@ -249,5 +249,37 @@ EOC;
 
         $this->assertCount(1, $itemResults);
         $this->assertTrue($itemResults[0]->hasError());
+    }
+
+    public function testReplaceResource()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'resource',
+                    'permalink' => 'https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg',
+                ],
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/about',
+                    'content' => '<img src="https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg" />',
+                ],
+            ]),
+        ]);
+        $assetsPath = '/img';
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
+        $providerManager->fetchResources();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(2, $itemResults);
+
+        $content = <<<EOC
+---
+source_permalink: 'http://mysite.com/about'
+
+---
+<img src="/img/2016/06/14004361452_b952deddeb_o.jpg" />
+EOC;
+        $this->assertEquals($content, $itemResults[1]->getContent());
     }
 }
