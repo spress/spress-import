@@ -130,21 +130,21 @@ class ProviderManager
 
         foreach ($items as $item) {
             try {
-                $resultItem = $this->processItem($item);
+                $this->processItem($item);
             } catch (\Exception $e) {
                 $resultItem = new ResultItem($item->getPermalink());
                 $resultItem->setHasError(true);
                 $resultItem->setMessage($e->getMessage());
-            }
-
-            if ($this->replaceUrls == true) {
-                $this->replaceUrlResourcePostAndPages();
-            }
-
-            if (is_null($resultItem) == false) {
                 $this->impotedItems[] = $resultItem;
-                $this->dumpResultItem($resultItem);
             }
+        }
+
+        if ($this->replaceUrls == true) {
+            $this->replaceUrlResourcePostAndPages();
+        }
+
+        foreach ($this->impotedItems as $resultItem) {
+            $this->dumpResultItem($resultItem);
         }
     }
 
@@ -152,13 +152,13 @@ class ProviderManager
     {
         switch ($item->getType()) {
             case Item::TYPE_POST:
-                return $this->processPostItem($item);
+                $this->processPostItem($item);
                 break;
             case Item::TYPE_RESOURCE:
-                return $this->processResourceItem($item);
+                $this->processResourceItem($item);
                 break;
             default:
-                return $this->processPageItem($item);
+                $this->processPageItem($item);
                 break;
         }
     }
@@ -186,8 +186,7 @@ class ProviderManager
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
         $this->postAndPageItems[] = $resultItem;
-
-        return $resultItem;
+        $this->impotedItems[] = $resultItem;
     }
 
     protected function processPostItem(Item $item)
@@ -210,8 +209,7 @@ class ProviderManager
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
         $this->postAndPageItems[] = $resultItem;
-
-        return $resultItem;
+        $this->impotedItems[] = $resultItem;
     }
 
     protected function processResourceItem(Item $item)
@@ -238,8 +236,7 @@ class ProviderManager
         $resultItem = new ResultItem($item->getPermalink(), $binaryContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
         $this->resourceItems[] = $resultItem;
-
-        return $resultItem;
+        $this->impotedItems[] = $resultItem;
     }
 
     protected function replaceUrlResourcePostAndPages()
