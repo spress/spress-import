@@ -24,7 +24,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class ProviderManager
 {
     protected $dryRun = false;
-    protected $enableFetchResources = false;
+    protected $fetchResources = false;
     protected $replaceResources = true;
     protected $layoutPage;
     protected $layoutPost;
@@ -58,7 +58,7 @@ class ProviderManager
         $this->dryRun = true;
     }
 
-    public function fetchResources()
+    public function enableFetchResources()
     {
         if (function_exists('curl_version') == false) {
             throw new \RuntimeException('CURL library was not found.');
@@ -68,7 +68,7 @@ class ProviderManager
             throw new \RuntimeException('The assets path is necessary for fetching resources.');
         }
 
-        $this->enableFetchResources = true;
+        $this->fetchResources = true;
     }
 
     /**
@@ -216,7 +216,7 @@ class ProviderManager
 
     protected function processResourceItem(Item $item)
     {
-        if ($this->enableFetchResources == false) {
+        if ($this->fetchResources == false) {
             return;
         }
 

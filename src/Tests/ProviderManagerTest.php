@@ -206,7 +206,7 @@ EOC;
         $assetsPath = 'img';
         $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
         $providerManager->enableDryRun();
-        $providerManager->fetchResources();
+        $providerManager->enableFetchResources();
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(1, $itemResults);
@@ -225,7 +225,7 @@ EOC;
         ]);
         $assetsPath = '/img';
         $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
-        $providerManager->fetchResources();
+        $providerManager->enableFetchResources();
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(1, $itemResults);
@@ -244,7 +244,7 @@ EOC;
         ]);
         $assetsPath = '/img';
         $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
-        $providerManager->fetchResources();
+        $providerManager->enableFetchResources();
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(1, $itemResults);
@@ -268,7 +268,7 @@ EOC;
         ]);
         $assetsPath = '/img';
         $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
-        $providerManager->fetchResources();
+        $providerManager->enableFetchResources();
         $itemResults = $providerManager->import('array', []);
 
         $this->assertCount(2, $itemResults);
