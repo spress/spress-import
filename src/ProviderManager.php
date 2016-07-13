@@ -25,7 +25,7 @@ class ProviderManager
 {
     protected $dryRun = false;
     protected $fetchResources = false;
-    protected $replaceResources = true;
+    protected $replaceUrls = true;
     protected $layoutPage;
     protected $layoutPost;
     protected $assetsPath;
@@ -63,7 +63,7 @@ class ProviderManager
      *
      * @throws RuntimeException If CURL is not presents.
      *
-     * @see doNotReplaceResources
+     * @see doNotReplaceUrls
      */
     public function enableFetchResources()
     {
@@ -75,14 +75,11 @@ class ProviderManager
     }
 
     /**
-     * Avoids to replace the URLs matched the fetched resources by local resources.
-     * This option only has effect if fetch resources feature is enabled.
-     *
-     * @see fetchResources
+     * Avoids to replace the source URLs with local relative URLs.
      */
-    public function doNotReplaceResources()
+    public function doNotReplaceUrls()
     {
-        $this->replaceResources = false;
+        $this->replaceUrls = false;
     }
 
     /**
@@ -140,7 +137,7 @@ class ProviderManager
                 $resultItem->setMessage($e->getMessage());
             }
 
-            if ($this->replaceResources == true) {
+            if ($this->replaceUrls == true) {
                 $this->replaceUrlResourcePostAndPages();
             }
 

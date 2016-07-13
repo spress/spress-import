@@ -24,7 +24,8 @@ class SpressImportWordpressCommand extends CommandPlugin
         $definition->addOption('dry-run', null, null);
         $definition->addOption('post-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for post items');
         $definition->addOption('page-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for page items');
-        $definition->addOption('fetch-images', null, null, 'Fetch images used by the blog');
+        $definition->addOption('fetch-images', null, null, 'Fetch images used by the Wordpress blog');
+        $definition->addOption('not-replace-urls', null, null, 'Do not replace old Wordpress URLs to the new Spress path');
         $definition->addOption('assets-dir', null, CommandDefinition::VALUE_REQUIRED, 'Relative directory to content folder for storing the fetched images', 'assets');
 
         return $definition;
@@ -59,6 +60,10 @@ class SpressImportWordpressCommand extends CommandPlugin
 
         if ($options['fetch-images'] == true) {
             $providerManager->enableFetchResources();
+        }
+
+        if ($options['not-replace-urls'] == true) {
+            $providerManager->doNotReplaceUrls();
         }
 
         if (is_null($options['post-layout']) == false) {
