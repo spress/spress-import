@@ -58,7 +58,7 @@ class SpressImportWordpressCommand extends CommandPlugin
         }
 
         if ($options['fetch-images'] == true) {
-            $providerManager->fetchResources();
+            $providerManager->enableFetchResources();
         }
 
         if (is_null($options['post-layout']) == false) {
