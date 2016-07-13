@@ -37,5 +37,6 @@ $ spress import:wordpress /path-to/my-wxr-file.xml
 * `--dry-run`: This option displays the items imported without actually modifying your site.
 * `--post-layout`: Layout applied to posts. e.g: `--post-layout=post`.
 * `--page-layout`: Layout applied to pages. e.g: `--page-layout=default`.
-* `--fetch-images`: Fetch images used in the blog.
+* `--fetch-images`: Fetch images used in the Wordpress blog.
+* `--not-replace-urls`: Avoids to replace Wordpress URLs in pages and post to local Spress URLs.
 * `--assets-dir`: Relative folder to `src` directory. `content/assets` by default.
