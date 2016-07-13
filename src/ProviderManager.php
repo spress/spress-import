@@ -42,7 +42,7 @@ class ProviderManager
      * @param string             $srcPath    Path to the src folder. e.g: "/site/src".
      * @param string             $assetsPath Relative path to `$srcPath/content` for storing the assets. e.g: "assets"
      */
-    public function __construct(ProviderCollection $collection, $srcPath, $assetsPath = null)
+    public function __construct(ProviderCollection $collection, $srcPath, $assetsPath = '')
     {
         $this->srcPath = $srcPath;
         $this->assetsPath = $this->sanitizePath('content/'.$assetsPath);
@@ -58,14 +58,17 @@ class ProviderManager
         $this->dryRun = true;
     }
 
+    /**
+     * Enable fetching blog resources (images used in the blog).
+     *
+     * @throws RuntimeException If CURL is not presents.
+     *
+     * @see doNotReplaceResources
+     */
     public function enableFetchResources()
     {
         if (function_exists('curl_version') == false) {
             throw new \RuntimeException('CURL library was not found.');
-        }
-
-        if (empty($this->assetsPath) == true) {
-            throw new \RuntimeException('The assets path is necessary for fetching resources.');
         }
 
         $this->fetchResources = true;
@@ -75,9 +78,9 @@ class ProviderManager
      * Avoids to replace the URLs matched the fetched resources by local resources.
      * This option only has effect if fetch resources feature is enabled.
      *
-     * @See fetchResources
+     * @see fetchResources
      */
-    public function DoNotReplaceResources()
+    public function doNotReplaceResources()
     {
         $this->replaceResources = false;
     }
