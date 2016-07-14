@@ -57,7 +57,7 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("---\nsource_permalink: 'http://mysite.com/about'\n\n---\n", $itemResult->getContent());
     }
 
-    public function testPermalinkWithExtension()
+    public function testImportPage()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
@@ -251,7 +251,7 @@ EOC;
         $this->assertTrue($itemResults[0]->hasError());
     }
 
-    public function testReplaceResource()
+    public function testReplaceSourceUrls()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
@@ -279,6 +279,39 @@ source_permalink: 'http://mysite.com/about'
 
 ---
 <img src="/img/2016/06/14004361452_b952deddeb_o.jpg" />
+EOC;
+        $this->assertEquals($content, $itemResults[1]->getContent());
+    }
+
+    public function testNotReplaceSourceUrls()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'resource',
+                    'permalink' => 'https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg',
+                ],
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/about',
+                    'content' => '<img src="https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg" />',
+                ],
+            ]),
+        ]);
+        $assetsPath = '/img';
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
+        $providerManager->enableFetchResources();
+        $providerManager->doNotReplaceUrls();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(2, $itemResults);
+
+        $content = <<<EOC
+---
+source_permalink: 'http://mysite.com/about'
+
+---
+<img src="https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg" />
 EOC;
         $this->assertEquals($content, $itemResults[1]->getContent());
     }
