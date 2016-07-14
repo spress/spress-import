@@ -34,6 +34,7 @@ class ProviderManager
     protected $impotedItems = [];
     protected $resourceItems = [];
     protected $postAndPageItems = [];
+    protected $frontmatterPattern = '/^-{3}\r?\n(.*)\r?\n?-{3}\r?\n(.*)/isU';
 
     /**
      * Constructor.
@@ -165,8 +166,7 @@ class ProviderManager
 
     protected function processPageItem(Item $item)
     {
-        $urlPath = parse_url($item->getPermalink(), PHP_URL_PATH);
-        $urlPath = $this->normalizePath($urlPath);
+        $urlPath = $this->getPathFromPermalink($item->getPermalink());
         $baseName = basename($urlPath);
         $baseNameLength = strlen($baseName.'/');
         $pathWithoutBase = substr_replace($urlPath, '', -$baseNameLength, $baseNameLength);
@@ -178,6 +178,10 @@ class ProviderManager
         if (strpos($baseName, '.') === false) {
             $baseName .= '.html';
         }
+
+        $attributes = $item->getAttributes();
+        $attributes['permalink'] = $this->normalizedPathToPermalink($urlPath);
+        $item->setAttributes($attributes);
 
         $relativePath = $this->sanitizePath('content/'.$pathWithoutBase.'/'.$baseName);
         $fileExists = file_exists($this->getSrcPath($relativePath));
@@ -199,6 +203,11 @@ class ProviderManager
             throw new \RuntimeException(sprintf('A title in post item: "%s" is required.', $item->getPermalink()));
         }
 
+        $urlPath = $this->getPathFromPermalink($item->getPermalink());
+        $attributes = $item->getAttributes();
+        $attributes['permalink'] = $this->normalizedPathToPermalink($urlPath);
+        $item->setAttributes($attributes);
+
         $slugedTitle = Str::slug($item->getTitle());
         $filename = sprintf('%s-%s.html', $item->getDate()->format('Y-m-d'), $slugedTitle);
 
@@ -218,9 +227,7 @@ class ProviderManager
             return;
         }
 
-        $urlPath = parse_url($item->getPermalink(), PHP_URL_PATH);
-        $urlPath = $this->normalizePath($urlPath);
-
+        $urlPath = $this->getPathFromPermalink($item->getPermalink());
         $baseName = basename($urlPath);
         $baseNameLength = strlen($baseName.'/');
         $pathWithoutBase = substr_replace($urlPath, '', -$baseNameLength, $baseNameLength);
@@ -244,7 +251,7 @@ class ProviderManager
         $urlsSourcePermalinks = [];
         $urlLocal = [];
 
-        foreach ($this->resourceItems as $resultItem) {
+        foreach ($this->impotedItems as $resultItem) {
             $urlsSourcePermalinks[] = $resultItem->getSourcePermalink();
             $urlLocal[] = Str::deletePrefix($resultItem->getRelativePath(), 'content');
         }
@@ -253,6 +260,13 @@ class ProviderManager
             $content = $resultItem->getContent();
             $resultItem->setContent(str_replace($urlsSourcePermalinks, $urlLocal, $content));
         }
+    }
+
+    protected function getPathFromPermalink($permalink)
+    {
+        $path = parse_url($permalink, PHP_URL_PATH);
+
+        return $this->normalizePath($path);
     }
 
     protected function normalizePath($url)
@@ -270,6 +284,11 @@ class ProviderManager
         return $this->srcPath.'/'.$relativePath;
     }
 
+    protected function normalizedPathToPermalink($urlPath)
+    {
+        return rtrim('/'.$urlPath, '/');
+    }
+
     protected function dumpResultItem(ResultItem $resultItem)
     {
         if ($this->dryRun == true || $resultItem->hasError() == true) {
@@ -283,7 +302,6 @@ class ProviderManager
     protected function getSpressContent(Item $item)
     {
         $attributes = $item->getAttributes();
-        $attributes['source_permalink'] = $item->getPermalink();
 
         switch ($item->getType()) {
             case Item::TYPE_POST:
