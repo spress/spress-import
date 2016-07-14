@@ -53,7 +53,7 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
 
         $itemResult = $itemResults[0];
 
-        $this->assertEquals('about.html', $itemResult->getRelativePath());
+        $this->assertEquals('content/about.html', $itemResult->getRelativePath());
         $this->assertEquals("---\nsource_permalink: 'http://mysite.com/about'\n\n---\n", $itemResult->getContent());
     }
 
@@ -75,7 +75,7 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
 
         $itemResult = $itemResults[0];
 
-        $this->assertEquals('about/license.html', $itemResult->getRelativePath());
+        $this->assertEquals('content/about/license.html', $itemResult->getRelativePath());
     }
 
     public function testWritePageFile()
@@ -91,7 +91,7 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $providerManager = new ProviderManager($providerCollection, $this->srcPath);
         $itemResults = $providerManager->import('array', []);
 
-        $this->assertFileExists($this->srcPath.'/about.html');
+        $this->assertFileExists($this->srcPath.'/content/about.html');
     }
 
     public function testImportPost()

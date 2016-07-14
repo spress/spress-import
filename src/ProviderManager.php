@@ -59,7 +59,7 @@ class ProviderManager
     }
 
     /**
-     * Enable fetching blog resources (images used in the blog).
+     * Enable fetching blog resources (e.g: images used by the blog).
      *
      * @throws RuntimeException If CURL is not presents.
      *
@@ -140,7 +140,7 @@ class ProviderManager
         }
 
         if ($this->replaceUrls == true) {
-            $this->replaceUrlResourcePostAndPages();
+            $this->replaceSourceUrlsPostAndPages();
         }
 
         foreach ($this->impotedItems as $resultItem) {
@@ -179,7 +179,7 @@ class ProviderManager
             $baseName .= '.html';
         }
 
-        $relativePath = $this->sanitizePath($pathWithoutBase.'/'.$baseName);
+        $relativePath = $this->sanitizePath('content/'.$pathWithoutBase.'/'.$baseName);
         $fileExists = file_exists($this->getSrcPath($relativePath));
         $spressContent = $this->getSpressContent($item);
 
@@ -239,7 +239,7 @@ class ProviderManager
         $this->impotedItems[] = $resultItem;
     }
 
-    protected function replaceUrlResourcePostAndPages()
+    protected function replaceSourceUrlsPostAndPages()
     {
         $urlsSourcePermalinks = [];
         $urlLocal = [];
