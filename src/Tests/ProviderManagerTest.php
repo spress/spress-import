@@ -193,7 +193,7 @@ EOC;
         $this->assertEquals($content, $itemResult->getContent());
     }
 
-    public function testFetchImagen()
+    public function testFetchResources()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
@@ -213,7 +213,25 @@ EOC;
         $this->assertEquals('content/img/2016/06/14004361452_b952deddeb_o.jpg', $itemResults[0]->getRelativePath());
     }
 
-    public function testWriteImagen()
+    public function testNotFetchResources()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'resource',
+                    'permalink' => 'https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg',
+                ],
+            ]),
+        ]);
+        $assetsPath = 'img';
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(0, $itemResults);
+    }
+
+    public function testWriteResource()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
@@ -232,7 +250,7 @@ EOC;
         $this->assertFileExists($this->srcPath.'/content/img/2016/06/14004361452_b952deddeb_o.jpg');
     }
 
-    public function testImagenNotFound()
+    public function testResourceNotFound()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
