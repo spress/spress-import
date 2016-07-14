@@ -44,7 +44,7 @@ class SpressImportWordpressCommand extends CommandPlugin
     {
         $style = new SpressImportConsoleStyle($io);
         $file = $arguments['file'];
-        $srcPath = __DIR__.'/../../../';
+        $srcPath = __DIR__.'/../../../../';
 
         $style->title('Importing from Wordpress WXR file');
 
