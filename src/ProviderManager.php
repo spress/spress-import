@@ -34,7 +34,6 @@ class ProviderManager
     protected $impotedItems = [];
     protected $resourceItems = [];
     protected $postAndPageItems = [];
-    protected $frontmatterPattern = '/^-{3}\r?\n(.*)\r?\n?-{3}\r?\n(.*)/isU';
 
     /**
      * Constructor.
