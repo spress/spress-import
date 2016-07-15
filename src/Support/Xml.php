@@ -25,17 +25,21 @@ class Xml
      *
      * @return SimpleXMLElement
      *
-     * @throw RuntimeException If there was an error when reading the file.
+     * @throw RuntimeException If file not found or there was an error when reading the file.
      */
     public static function loadFile($file)
     {
+        if (file_exists($file) === false) {
+            throw new \RuntimeException(sprintf('File "%s" not found.', $file));
+        }
+
         $internal_errors = libxml_use_internal_errors(true);
         stream_filter_register('xmlutf8', 'Spress\Import\Support\ValidUtf8XmlFilter');
 
         $xml = simplexml_load_file('php://filter/read=xmlutf8/resource='.$file);
 
         if ($xml === false) {
-            throw new RuntimeException(sprintf(
+            throw new \RuntimeException(sprintf(
                 'There was an error when reading this XML file: "%s".',
                 libxml_get_errors()));
         }

@@ -21,4 +21,13 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('SimpleXMLElement', $xml);
     }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage File "./not-found.xml" not found.
+     */
+    public function testFailLoadNotFoundXmlFile()
+    {
+        $xml = Xml::loadFile('./not-found.xml');
+    }
 }
