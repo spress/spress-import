@@ -180,6 +180,7 @@ class ProviderManager
 
         $attributes = $item->getAttributes();
         $attributes['permalink'] = $this->normalizedPathToPermalink($urlPath);
+        $attributes['no_html_extension'] = true;
         $item->setAttributes($attributes);
 
         $relativePath = $this->sanitizePath('content/'.$pathWithoutBase.'/'.$baseName);
@@ -205,6 +206,7 @@ class ProviderManager
         $urlPath = $this->getPathFromPermalink($item->getPermalink());
         $attributes = $item->getAttributes();
         $attributes['permalink'] = $this->normalizedPathToPermalink($urlPath);
+        $attributes['no_html_extension'] = true;
         $item->setAttributes($attributes);
 
         $slugedTitle = Str::slug($item->getTitle());
