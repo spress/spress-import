@@ -54,7 +54,7 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $itemResult = $itemResults[0];
 
         $this->assertEquals('content/about.html', $itemResult->getRelativePath());
-        $this->assertEquals("---\npermalink: /about\n\n---\n", $itemResult->getContent());
+        $this->assertEquals("---\npermalink: /about\nno_html_extension: true\n\n---\n", $itemResult->getContent());
     }
 
     public function testImportPage()
@@ -157,6 +157,7 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $content = <<<EOC
 ---
 permalink: /posts/hello-world
+no_html_extension: true
 layout: default
 title: 'Hello world'
 
@@ -185,6 +186,7 @@ EOC;
         $content = <<<EOC
 ---
 permalink: /about
+no_html_extension: true
 layout: page
 
 ---
@@ -294,6 +296,7 @@ EOC;
         $content = <<<EOC
 ---
 permalink: /about
+no_html_extension: true
 
 ---
 <img src="/img/2016/06/14004361452_b952deddeb_o.jpg" />
@@ -327,6 +330,7 @@ EOC;
         $content = <<<EOC
 ---
 permalink: /about
+no_html_extension: true
 
 ---
 <img src="https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg" />
