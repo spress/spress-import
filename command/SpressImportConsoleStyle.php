@@ -59,6 +59,14 @@ class SpressImportConsoleStyle
         ]);
     }
 
+    /**
+     * Writes an error.
+     * Example of output:
+     * ```
+     * Error:
+     *  The error message
+     * ```.
+     */
     public function error($message)
     {
         $this->io->write([
