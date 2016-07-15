@@ -59,6 +59,16 @@ class SpressImportConsoleStyle
         ]);
     }
 
+    public function error($message)
+    {
+        $this->io->write([
+            '',
+            'Error:',
+            sprintf(' <error fg=white;bg=red>%s</>', $message),
+            '',
+        ]);
+    }
+
     /**
      * Writes a list of ResultItem objects.
      *
