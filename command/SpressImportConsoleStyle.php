@@ -71,8 +71,7 @@ class SpressImportConsoleStyle
     {
         $this->io->write([
             '',
-            'Error:',
-            sprintf(' <error fg=white;bg=red>%s</>', $message),
+            sprintf(' <error>Error: %s</error>', $message),
             '',
         ]);
     }
