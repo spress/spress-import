@@ -74,11 +74,15 @@ class SpressImportWordpressCommand extends CommandPlugin
             $providerManager->setPageLayout($options['page-layout']);
         }
 
-        $itemResults = $providerManager->import('wxr', [
-            'file' => $file,
-        ]);
+        try {
+            $itemResults = $providerManager->import('wxr', [
+                'file' => $file,
+            ]);
 
-        $style->ResultItems($itemResults);
+            $style->ResultItems($itemResults);
+        } catch (Exception $e) {
+            $style->error($e->getMessage());
+        }
     }
 
     /**
