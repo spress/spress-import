@@ -33,8 +33,8 @@ class SpressImportConsoleStyle
     {
         $this->io->write([
             '',
-            sprintf(' <comment>%s</>', $message),
-            sprintf(' <comment>%s</>', str_repeat('=', strlen($message))),
+            sprintf('<comment>%s</>', $message),
+            sprintf('<comment>%s</>', str_repeat('=', strlen($message))),
             '',
         ]);
     }
@@ -53,8 +53,8 @@ class SpressImportConsoleStyle
     {
         $this->io->write([
             '',
-            sprintf(' <comment>%s</>', $message),
-            sprintf(' <comment>%s</>', str_repeat('-', strlen($message))),
+            sprintf('<comment>%s</>', $message),
+            sprintf('<comment>%s</>', str_repeat('-', strlen($message))),
             '',
         ]);
     }
@@ -71,7 +71,7 @@ class SpressImportConsoleStyle
     {
         $this->io->write([
             '',
-            sprintf(' <error>Error: %s</error>', $message),
+            sprintf('<error>Error: %s</error>', $message),
             '',
         ]);
     }
