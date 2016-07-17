@@ -45,7 +45,7 @@ class SpressImportWordpressCommand extends CommandPlugin
         $file = $arguments['file'];
         $srcPath = __DIR__.'/../../../../';
 
-        $style->title('Importing from Wordpress WXR file');
+        $style->title('Importing from a Wordpress WXR file');
 
         $providerCollection = new ProviderCollection([
             'wxr' => new WxrProvider(),
@@ -55,6 +55,8 @@ class SpressImportWordpressCommand extends CommandPlugin
 
         if ($options['dry-run'] == true) {
             $providerManager->enableDryRun();
+
+            $io->write('<info>Dry-run enabled</info>');
         }
 
         if ($options['fetch-images'] == true) {
@@ -68,6 +70,8 @@ class SpressImportWordpressCommand extends CommandPlugin
         if (is_null($options['post-layout']) == false) {
             $providerManager->setPostLayout($options['post-layout']);
         }
+
+        $io->write('<info>Starting...</info>');
 
         try {
             $itemResults = $providerManager->import('wxr', [

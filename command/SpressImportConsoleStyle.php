@@ -86,7 +86,10 @@ class SpressImportConsoleStyle
         $errors = 0;
         $success = 0;
 
-        $this->io->write('');
+        $this->io->write([
+            '',
+            'Imported items:',
+        ]);
 
         foreach ($resultItems as $item) {
             $source = $item->getSourcePermalink();
