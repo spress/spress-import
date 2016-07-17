@@ -82,6 +82,10 @@ class WxrProvider implements ProviderInterface
 
             $dc = $item->children('http://purl.org/dc/elements/1.1/');
 
+            if ((string) $wp->status == 'draft') {
+                $attributes['draft'] = true;
+            }
+
             $attributes['author'] = (string) $dc->creator;
             $attributes['excerpt'] = (string) $excerpt->encoded;
             $attributes['categories'] = [];
