@@ -88,7 +88,8 @@ class SpressImportConsoleStyle
 
         $this->io->write([
             '',
-            'Imported items:',
+            '<info>Imported items:</info>',
+            '',
         ]);
 
         foreach ($resultItems as $item) {
