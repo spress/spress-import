@@ -179,7 +179,13 @@ class ProviderManager
         }
 
         $attributes = $item->getAttributes();
-        $attributes['permalink'] = $this->normalizedPathToPermalink($urlPath);
+
+        $permalinkAttr = $this->normalizedPathToPermalink($urlPath);
+
+        if (empty($permalinkAttr) == false) {
+            $attributes['permalink'] = $permalinkAttr;
+        }
+
         $attributes['no_html_extension'] = true;
         $item->setAttributes($attributes);
 
