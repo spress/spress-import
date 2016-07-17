@@ -23,7 +23,6 @@ class SpressImportWordpressCommand extends CommandPlugin
         $definition->addArgument('file', CommandDefinition::REQUIRED, 'Path to WXR file');
         $definition->addOption('dry-run', null, null);
         $definition->addOption('post-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for post items');
-        $definition->addOption('page-layout', null, CommandDefinition::VALUE_REQUIRED, 'Layout for page items');
         $definition->addOption('fetch-images', null, null, 'Fetch images used by the Wordpress blog');
         $definition->addOption('not-replace-urls', null, null, 'Do not replace old Wordpress URLs to the new Spress path');
         $definition->addOption('assets-dir', null, CommandDefinition::VALUE_REQUIRED, 'Relative directory to content folder for storing the fetched images', 'assets');
@@ -70,10 +69,6 @@ class SpressImportWordpressCommand extends CommandPlugin
             $providerManager->setPostLayout($options['post-layout']);
         }
 
-        if (is_null($options['page-layout']) == false) {
-            $providerManager->setPageLayout($options['page-layout']);
-        }
-
         try {
             $itemResults = $providerManager->import('wxr', [
                 'file' => $file,
@@ -100,7 +95,7 @@ class SpressImportWordpressCommand extends CommandPlugin
     {
         return [
             'name' => 'spress/spress-import-wordpress',
-            'description' => 'A plugin for importing from various blog platform to Spress',
+            'description' => 'A plugin for importing from Wordpress blogs to Spress',
             'author' => 'Victor Puertas',
             'license' => 'MIT',
         ];

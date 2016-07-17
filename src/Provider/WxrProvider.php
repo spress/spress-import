@@ -48,6 +48,8 @@ class WxrProvider implements ProviderInterface
 
     /**
      * {@inheritdoc}
+     * This provider only provide post (post_type = 'post')
+     * and resource (post_type = 'attachment') items.
      */
     public function getItems()
     {
@@ -56,9 +58,6 @@ class WxrProvider implements ProviderInterface
 
         $this->processVersion($xml);
         $this->processNamespaces($xml);
-
-        $base_url = $xml->xpath('/rss/channel/wp:base_site_url');
-        $base_url = (string) trim($base_url[0]);
 
         foreach ($xml->channel->item as $item) {
             $attributes = [];
@@ -72,6 +71,11 @@ class WxrProvider implements ProviderInterface
             }
 
             $importedItem = $this->makeItem($wp, (string) $permalink);
+
+            if (is_null($importedItem)) {
+                continue;
+            }
+
             $importedItem->setTitle((string) $item->title);
             $importedItem->setContent((string) $content->encoded);
             $importedItem->setDate(new \DateTime((string) $wp->post_date_gmt));
@@ -115,8 +119,7 @@ class WxrProvider implements ProviderInterface
     {
         $version = $xml->xpath('/rss/channel/wp:wxr_version');
 
-        if ($version === false
-        ) {
+        if ($version === false) {
             throw new \RuntimeException('This does not appear to be a WXR file, missing or invalid WXR version number.');
         }
 
@@ -150,7 +153,7 @@ class WxrProvider implements ProviderInterface
             case 'attachment':
                 return new Item(Item::TYPE_RESOURCE, $permalink);
             default:
-                return new Item(Item::TYPE_PAGE, $permalink);
+                return;
         }
     }
 }
