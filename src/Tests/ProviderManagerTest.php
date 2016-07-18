@@ -136,6 +136,46 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->srcPath.'/content/posts/2016-06-29-hello-world.html');
     }
 
+    public function testPostWithoutDate()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'post',
+                    'permalink' => 'http://mysite.com/posts/hello-world',
+                    'title' => 'Hello world',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+        $this->assertTrue($itemResults[0]->hasError());
+        $this->assertEquals('Date in post item: "http://mysite.com/posts/hello-world" is required.', $itemResults[0]->getMessage());
+    }
+
+    public function testPostWithoutTitle()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'post',
+                    'permalink' => 'http://mysite.com/posts/hello-world',
+                    'date' => '2016-06-29',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+        $this->assertTrue($itemResults[0]->hasError());
+        $this->assertEquals('Title in post item: "http://mysite.com/posts/hello-world" is required.', $itemResults[0]->getMessage());
+    }
+
     public function testLayoutPost()
     {
         $providerCollection = new ProviderCollection([
@@ -233,7 +273,7 @@ EOC;
         $this->assertCount(0, $itemResults);
     }
 
-    public function testWriteResource()
+    public function testWriteResourceFile()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
@@ -334,24 +374,23 @@ EOC;
         $this->assertEquals($content, $itemResults[1]->getContent());
     }
 
-    public function testNotReplaceSourceUrls()
+    public function testNotReplaceSourceUrl()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
                 [
-                    'type' => 'resource',
-                    'permalink' => 'https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg',
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/latest-news',
                 ],
                 [
                     'type' => 'page',
                     'permalink' => 'http://mysite.com/about',
-                    'content' => '<img src="https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg" />',
+                    'content' => 'See our latest news <a href="http://mysite.com/latest-news">here</a>',
                 ],
             ]),
         ]);
-        $assetsPath = '/img';
-        $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
-        $providerManager->enableFetchResources();
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
         $providerManager->doNotReplaceUrls();
         $itemResults = $providerManager->import('array', []);
 
@@ -363,7 +402,7 @@ permalink: /about
 no_html_extension: true
 
 ---
-<img src="https://spressimport.files.wordpress.com/2016/06/14004361452_b952deddeb_o.jpg" />
+See our latest news <a href="http://mysite.com/latest-news">here</a>
 EOC;
         $this->assertEquals($content, $itemResults[1]->getContent());
     }

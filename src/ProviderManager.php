@@ -208,7 +208,7 @@ class ProviderManager
         }
 
         if (empty($item->getTitle())) {
-            throw new \RuntimeException(sprintf('A title in post item: "%s" is required.', $item->getPermalink()));
+            throw new \RuntimeException(sprintf('Title in post item: "%s" is required.', $item->getPermalink()));
         }
 
         $urlPath = $this->getPathFromPermalink($item->getPermalink());
