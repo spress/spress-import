@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Represents an item of content. e.g: post or page.
+ * Import items provided by registered providers.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
