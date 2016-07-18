@@ -18,6 +18,7 @@ namespace Spress\Import;
  */
 class ResultItem
 {
+    private $permalink;
     private $sourcePermalink;
     private $relativePath;
     private $message;
@@ -50,6 +51,26 @@ class ResultItem
     public function getSourcePermalink()
     {
         return $this->sourcePermalink;
+    }
+
+    /**
+     * Sets the permalink in the Spress site.
+     *
+     * @param string $permalink The permalink. e.g: "/foo".
+     */
+    public function setPermalink($permalink)
+    {
+        $this->permalink = $permalink;
+    }
+
+    /**
+     * Gets the permalink in the Spress site.
+     *
+     * @return string The permalink.
+     */
+    public function getPermalink()
+    {
+        return $this->permalink;
     }
 
     /**

@@ -33,7 +33,7 @@ class ResultItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('hi', $resultItem->getContent());
     }
 
-    public function testExistsPrevousFile()
+    public function testExistsPreviouslyFile()
     {
         $resultItem = new ResultItem('http://mysite.com/', '', true);
 
@@ -62,5 +62,13 @@ class ResultItemTest extends \PHPUnit_Framework_TestCase
         $resultItem->setMessage('ok');
 
         $this->assertEquals('ok', $resultItem->getMessage());
+    }
+
+    public function testGetPermalink()
+    {
+        $resultItem = new ResultItem('http://mysite.com/foo');
+        $resultItem->setPermalink('/foo');
+
+        $this->assertEquals('/foo', $resultItem->getPermalink());
     }
 }
