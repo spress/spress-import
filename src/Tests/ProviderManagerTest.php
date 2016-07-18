@@ -31,32 +31,6 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $fs->remove($this->srcPath);
     }
 
-    public function testContent()
-    {
-        $providerCollection = new ProviderCollection([
-            'array' => new ArrayProvider([
-                [
-                    'type' => 'page',
-                    'permalink' => 'http://mysite.com/about',
-                ],
-                [
-                    'type' => 'page',
-                    'permalink' => 'http://mysite.com/about/license',
-                ],
-            ]),
-        ]);
-        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
-        $providerManager->enableDryRun();
-        $itemResults = $providerManager->import('array', []);
-
-        $this->assertCount(2, $itemResults);
-
-        $itemResult = $itemResults[0];
-
-        $this->assertEquals('content/about.html', $itemResult->getRelativePath());
-        $this->assertEquals("---\npermalink: /about\nno_html_extension: true\n\n---\n", $itemResult->getContent());
-    }
-
     public function testImportPage()
     {
         $providerCollection = new ProviderCollection([
