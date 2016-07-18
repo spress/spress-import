@@ -258,7 +258,6 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $binaryContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
-        //$resultItem->setPermalink($relativePath);
         $resultItem->setPermalink(Str::deletePrefix($relativePath, 'content'));
 
         $this->resourceItems[] = $resultItem;
