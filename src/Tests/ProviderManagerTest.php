@@ -337,4 +337,59 @@ no_html_extension: true
 EOC;
         $this->assertEquals($content, $itemResults[1]->getContent());
     }
+
+    public function testNoPathInPostPermalink()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'post',
+                    'permalink' => 'http://mysite.com/?post=1',
+                    'date' => '2016-06-29',
+                    'title' => 'Hello world',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $itemResult = $itemResults[0];
+        $content = <<<EOC
+---
+no_html_extension: true
+title: 'Hello world'
+
+---
+
+EOC;
+        $this->assertEquals($content, $itemResult->getContent());
+        $this->assertEquals('content/posts/2016-06-29-hello-world.html', $itemResult->getRelativePath());
+    }
+
+    public function testNoPathInPagePermalink()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/?page=1',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $itemResult = $itemResults[0];
+        $content = <<<EOC
+---
+no_html_extension: true
+
+---
+
+EOC;
+        $this->assertEquals($content, $itemResult->getContent());
+        $this->assertEquals('content/index.html', $itemResult->getRelativePath());
+    }
 }
