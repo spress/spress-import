@@ -271,7 +271,39 @@ EOC;
         $this->assertTrue($itemResults[0]->hasError());
     }
 
-    public function testReplaceSourceUrls()
+    public function testReplaceSourceUrl()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/latest-news',
+                ],
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/about',
+                    'content' => 'See our latest news <a href="http://mysite.com/latest-news">here</a>',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(2, $itemResults);
+
+        $content = <<<EOC
+---
+permalink: /about
+no_html_extension: true
+
+---
+See our latest news <a href="/latest-news">here</a>
+EOC;
+        $this->assertEquals($content, $itemResults[1]->getContent());
+    }
+
+    public function testReplaceResourceUrl()
     {
         $providerCollection = new ProviderCollection([
             'array' => new ArrayProvider([
@@ -290,9 +322,7 @@ EOC;
         $providerManager = new ProviderManager($providerCollection, $this->srcPath, $assetsPath);
         $providerManager->enableFetchResources();
         $itemResults = $providerManager->import('array', []);
-
         $this->assertCount(2, $itemResults);
-
         $content = <<<EOC
 ---
 permalink: /about

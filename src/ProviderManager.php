@@ -195,6 +195,8 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
+        $resultItem->setPermalink(empty($permalinkAttr) ? $relativePath : $permalinkAttr);
+
         $this->postAndPageItems[] = $resultItem;
         $this->impotedItems[] = $resultItem;
     }
@@ -229,6 +231,8 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
+        $resultItem->setPermalink($permalinkAttr);
+
         $this->postAndPageItems[] = $resultItem;
         $this->impotedItems[] = $resultItem;
     }
@@ -254,6 +258,9 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $binaryContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
+        //$resultItem->setPermalink($relativePath);
+        $resultItem->setPermalink(Str::deletePrefix($relativePath, 'content'));
+
         $this->resourceItems[] = $resultItem;
         $this->impotedItems[] = $resultItem;
     }
@@ -265,7 +272,7 @@ class ProviderManager
 
         foreach ($this->impotedItems as $resultItem) {
             $urlsSourcePermalinks[] = $resultItem->getSourcePermalink();
-            $urlLocal[] = Str::deletePrefix($resultItem->getRelativePath(), 'content');
+            $urlLocal[] = $resultItem->getPermalink();
         }
 
         foreach ($this->postAndPageItems as $resultItem) {
