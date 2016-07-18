@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Import items provided by registered providers.
+ * Import the items provided by registered providers.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
