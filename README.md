@@ -23,6 +23,20 @@ frecuenly without notice until it reaches a stable version.
 ## How to use?
 See the concrete provider.
 
+## Source permalinks
+Import plugin tries to preserve the source permalink of each item. To reach that
+goal, this plugin adds the attributes: `permalink` and `no_html_extension`.
+
+e.g: for an item with the following permalink at source: `http://acme.com/what-is-new-this-time`
+the front matter block generated will be:
+
+```yaml
+---
+permalink: '/what-is-new-this-time'
+no_html_extension: true
+---
+```
+
 ### WXR files from Wordpress
 The sign of `import:wordpress` command is the following:
 
@@ -39,3 +53,11 @@ $ spress import:wordpress /path-to/my-wxr-file.xml --post-layout=post
 * `--fetch-images`: Fetch images used in the Wordpress blog.
 * `--not-replace-urls`: Avoids to replace Wordpress URLs in pages and posts by local Spress URLs.
 * `--assets-dir`: Relative folder to `src` directory. `content/assets` by default.
+
+### Item's attributes
+List of attributes added by this provider to each item:
+
+* `author`: The author of the post.
+* `excerpt`: The snippet of the post.
+* `categories`: list of terms that represents the categories.
+* `tags`: lists of terms that represents the tags.
