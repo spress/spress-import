@@ -27,6 +27,7 @@ class Item
     private $permalink;
     private $attributes = [];
     private $content;
+    private $contentExtension = 'html';
     private $fetchPermalink = true;
 
     /**
@@ -52,6 +53,27 @@ class Item
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Sets the filename extension (without dot) associated with the content.
+     * e.g: "md" for Markdown content.
+     *
+     * @param   $extension The extension.
+     */
+    public function setContentExtension($extension)
+    {
+        $this->contentExtension = $extension;
+    }
+
+    /**
+     * Gets the filename extension (without dot) associated with the content.
+     *
+     * @return string The filename extension. "html" by default.
+     */
+    public function getContentExtension()
+    {
+        return $this->contentExtension;
     }
 
     /**

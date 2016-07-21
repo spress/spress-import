@@ -23,6 +23,21 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/about', $item->getPermalink());
     }
 
+    public function testGetContentExtension()
+    {
+        $item = new Item(Item::TYPE_PAGE, '/about');
+
+        $this->assertEquals('html', $item->getContentExtension());
+    }
+
+    public function testSetContentExtension()
+    {
+        $item = new Item(Item::TYPE_PAGE, '/about');
+        $item->setContentExtension('md');
+
+        $this->assertEquals('md', $item->getContentExtension());
+    }
+
     public function testGetTitle()
     {
         $item = new Item(Item::TYPE_PAGE, '/welcome');

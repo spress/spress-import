@@ -171,11 +171,11 @@ class ProviderManager
         $pathWithoutBase = substr_replace($urlPath, '', -$baseNameLength, $baseNameLength);
 
         if ($baseName == '') {
-            $baseName = 'index.html';
+            $baseName = 'index.'.$item->getContentExtension();
         }
 
         if (strpos($baseName, '.') === false) {
-            $baseName .= '.html';
+            $baseName .= '.'.$item->getContentExtension();
         }
 
         $attributes = $item->getAttributes();
@@ -222,8 +222,9 @@ class ProviderManager
         $attributes['no_html_extension'] = true;
         $item->setAttributes($attributes);
 
+        $filenameExtension = $item->getContentExtension();
         $slugedTitle = Str::slug($item->getTitle());
-        $filename = sprintf('%s-%s.html', $item->getDate()->format('Y-m-d'), $slugedTitle);
+        $filename = sprintf('%s-%s.%s', $item->getDate()->format('Y-m-d'), $slugedTitle, $filenameExtension);
 
         $relativePath = $this->sanitizePath('content/posts/'.$filename);
         $fileExists = file_exists($this->getSrcPath($relativePath));
