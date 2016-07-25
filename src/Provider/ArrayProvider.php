@@ -26,12 +26,13 @@ class ArrayProvider implements ProviderInterface
     /**
      * Constructor.
      *
-     * @param     array of content. e.g:
+     * @param     array of items. e.g:
      * [
      *    [
      *      'type' => Item::TYPE_PAGE,
      *      'permalink' => '/acme.html',
      *      'content' => 'test',
+     *      'content_extension' => 'md',  // Indicates the content type. "html" by default.
      *      'attributes' => ['code' => true],
      *    ],
      *    [...],
@@ -70,6 +71,10 @@ class ArrayProvider implements ProviderInterface
 
             if (isset($content['content']) === true) {
                 $item->setContent($content['content']);
+            }
+
+            if (isset($content['content_extension']) === true) {
+                $item->setContentExtension($content['content_extension']);
             }
 
             if (isset($content['title']) === true) {
