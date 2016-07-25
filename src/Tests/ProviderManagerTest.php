@@ -50,6 +50,30 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $itemResult = $itemResults[0];
 
         $this->assertEquals('content/about/license.html', $itemResult->getRelativePath());
+        $this->assertEquals('/about/license.html', $itemResult->getPermalink());
+    }
+
+    public function testImportMarkdownPage()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'page',
+                    'permalink' => 'http://mysite.com/about/license',
+                    'content_extension' => 'md',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+
+        $itemResult = $itemResults[0];
+
+        $this->assertEquals('content/about/license.md', $itemResult->getRelativePath());
+        $this->assertEquals('/about/license', $itemResult->getPermalink());
     }
 
     public function testWritePageFile()
@@ -89,6 +113,32 @@ class ProviderManagerTest extends \PHPUnit_Framework_TestCase
         $itemResult = $itemResults[0];
 
         $this->assertEquals('content/posts/2016-06-29-hello-world.html', $itemResult->getRelativePath());
+        $this->assertEquals('/posts/hello-world', $itemResult->getPermalink());
+    }
+
+    public function testImportMarkdownPost()
+    {
+        $providerCollection = new ProviderCollection([
+            'array' => new ArrayProvider([
+                [
+                    'type' => 'post',
+                    'permalink' => 'http://mysite.com/posts/hello-world',
+                    'date' => '2016-06-29',
+                    'title' => 'Hello world',
+                    'content_extension' => 'md',
+                ],
+            ]),
+        ]);
+        $providerManager = new ProviderManager($providerCollection, $this->srcPath);
+        $providerManager->enableDryRun();
+        $itemResults = $providerManager->import('array', []);
+
+        $this->assertCount(1, $itemResults);
+
+        $itemResult = $itemResults[0];
+
+        $this->assertEquals('content/posts/2016-06-29-hello-world.md', $itemResult->getRelativePath());
+        $this->assertEquals('/posts/hello-world', $itemResult->getPermalink());
     }
 
     public function testWritePostFile()
@@ -408,6 +458,7 @@ title: 'Hello world'
 EOC;
         $this->assertEquals($content, $itemResult->getContent());
         $this->assertEquals('content/posts/2016-06-29-hello-world.html', $itemResult->getRelativePath());
+        $this->assertEquals('', $itemResult->getPermalink());
     }
 
     public function testNoPathInPagePermalink()
@@ -434,5 +485,6 @@ no_html_extension: true
 EOC;
         $this->assertEquals($content, $itemResult->getContent());
         $this->assertEquals('content/index.html', $itemResult->getRelativePath());
+        $this->assertEquals('', $itemResult->getPermalink());
     }
 }

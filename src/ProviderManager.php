@@ -195,7 +195,7 @@ class ProviderManager
 
         $resultItem = new ResultItem($item->getPermalink(), $spressContent, $fileExists);
         $resultItem->setRelativePath($relativePath);
-        $resultItem->setPermalink(empty($permalinkAttr) ? $relativePath : $permalinkAttr);
+        $resultItem->setPermalink($permalinkAttr);
 
         $this->postAndPageItems[] = $resultItem;
         $this->impotedItems[] = $resultItem;
