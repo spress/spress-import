@@ -14,7 +14,8 @@
         "php": ">=5.5",
         "spress/spress-installer": "2.0.*",
         "symfony/filesystem": "2.7.*",
-        "symfony/yaml": "2.7.*"
+        "symfony/yaml": "2.7.*",
+        "league/csv": "^8.0"
     },
     "autoload": {
         "psr-4": {
