@@ -52,7 +52,7 @@ class CsvProvider implements ProviderInterface
      *  - escape_character (string): Sets the escape character. '\' by default.
      *    Warning: str_getcsv function stills with a bug related with the escape character
      *      after more than four years. @link https://bugs.php.net/bug.php?id=55413
-     *  - no_header (bool): Indicates if the first row is considered as header.
+     *  - not_header (bool): Indicates if the first row is considered as header.
      *      false by default.
      *
      *  e.g: ['file' => '/tmp/file.csv']
@@ -87,7 +87,7 @@ class CsvProvider implements ProviderInterface
         ]);
 
         foreach ($rows as $row) {
-            if ($this->options['no_header'] == false && $isFirstRow == true) {
+            if ($this->options['not_header'] == false && $isFirstRow == true) {
                 ++$line;
                 $isFirstRow = false;
                 continue;
@@ -174,7 +174,7 @@ class CsvProvider implements ProviderInterface
             'delimiter_character' => ',',
             'enclosure_character' => '"',
             'escape_character' => '\\',
-            'no_header' => false,
+            'not_header' => false,
         ], $options);
 
         if (is_string($resolved['delimiter_character']) == false) {
@@ -189,8 +189,8 @@ class CsvProvider implements ProviderInterface
             throw new InvalidArgumentException('Expected string at "escape_character" option.');
         }
 
-        if (is_bool($resolved['no_header']) == false) {
-            throw new InvalidArgumentException('Expected boolean at "no_header" option.');
+        if (is_bool($resolved['not_header']) == false) {
+            throw new InvalidArgumentException('Expected boolean at "not_header" option.');
         }
 
         return $resolved;

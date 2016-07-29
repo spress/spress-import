@@ -69,7 +69,7 @@ EOF;
         Welcome,"http://mysite.com/posts/welcome",Welcome to Spress,2016-07-26
 EOF;
         $provider = new CsvProvider();
-        $provider->setUp(['content' => $csv, 'no_header' => true]);
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
         $items = $provider->getItems();
 
         $this->assertCount(2, $items);
@@ -84,7 +84,7 @@ EOF;
         Welcome,"http://mysite.com/posts/welcome",Welcome to Spress,2016-07-26,html
 EOF;
         $provider = new CsvProvider();
-        $provider->setUp(['content' => $csv, 'no_header' => true]);
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
         $items = $provider->getItems();
 
         $this->assertCount(2, $items);
@@ -101,7 +101,7 @@ EOF;
         $provider = new CsvProvider();
         $provider->setUp([
             'content' => $csv,
-            'no_header' => true,
+            'not_header' => true,
             'delimiter_character' => ';',
         ]);
         $items = $provider->getItems();
@@ -122,7 +122,7 @@ EOF;
         $provider = new CsvProvider();
         $provider->setUp([
             'content' => $csv,
-            'no_header' => true,
+            'not_header' => true,
             'enclosure_character' => "'",
         ]);
         $items = $provider->getItems();
@@ -144,7 +144,7 @@ EOF;
         "","http://mysite.com/posts/hello",The content,2016-07-27
 EOF;
         $provider = new CsvProvider();
-        $provider->setUp(['content' => $csv, 'no_header' => true]);
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
         $items = $provider->getItems();
     }
 
@@ -158,7 +158,7 @@ EOF;
         Hello,,The content,2016-07-27
 EOF;
         $provider = new CsvProvider();
-        $provider->setUp(['content' => $csv, 'no_header' => true]);
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
         $items = $provider->getItems();
     }
 
@@ -172,7 +172,7 @@ EOF;
         Hello,"http://mysite.com/posts/hello",,2016-07-27
 EOF;
         $provider = new CsvProvider();
-        $provider->setUp(['content' => $csv, 'no_header' => true]);
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
         $items = $provider->getItems();
     }
 
@@ -186,7 +186,7 @@ EOF;
         Hello,"http://mysite.com/posts/hello",The content,no-date
 EOF;
         $provider = new CsvProvider();
-        $provider->setUp(['content' => $csv, 'no_header' => true]);
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
         $items = $provider->getItems();
     }
 
