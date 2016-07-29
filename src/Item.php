@@ -36,9 +36,15 @@ class Item
      * @param string $type      Type of item (page, post or resource).
      * @param string $permalink Permalink of the item. This value acts as identifier
      *                          of the content. e.g: http://acme.com/about
+     *
+     * @throws UnexpectedValueException If bad permalink.
      */
     public function __construct($type, $permalink)
     {
+        if (strpos($permalink, ' ') !== false) {
+            throw new \UnexpectedValueException(sprintf('Bad permalink: "%s". Contains white space/s.', $permalink));
+        }
+
         $this->title = '';
         $this->content = '';
         $this->type = $type;
