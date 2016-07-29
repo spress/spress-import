@@ -71,6 +71,48 @@ EOF;
         $this->assertEquals('html', $items[1]->getContentExtension());
     }
 
+    public function testChangeDelimiterCharacter()
+    {
+        $csv = <<<EOF
+        Hello;"http://mysite.com/posts/hello";The content;2016-07-27
+        Welcome;"http://mysite.com/posts/welcome";Welcome to Spress;2016-07-26
+EOF;
+        $provider = new CsvProvider();
+        $provider->setUp([
+            'content' => $csv,
+            'no_header' => true,
+            'delimiter_character' => ';',
+        ]);
+        $items = $provider->getItems();
+
+        $this->assertCount(2, $items);
+        $this->assertEquals('Hello', $items[0]->getTitle());
+        $this->assertEquals('Welcome', $items[1]->getTitle());
+        $this->assertEquals('md', $items[0]->getContentExtension());
+        $this->assertEquals('md', $items[1]->getContentExtension());
+    }
+
+    public function testChangeEnclousureCharacter()
+    {
+        $csv = <<<EOF
+        Hello,'http://mysite.com/posts/hello',The content,2016-07-27
+        Welcome,'http://mysite.com/posts/welcome',Welcome to Spress,2016-07-26
+EOF;
+        $provider = new CsvProvider();
+        $provider->setUp([
+            'content' => $csv,
+            'no_header' => true,
+            'enclosure_character' => "'",
+        ]);
+        $items = $provider->getItems();
+
+        $this->assertCount(2, $items);
+        $this->assertEquals('Hello', $items[0]->getTitle());
+        $this->assertEquals('Welcome', $items[1]->getTitle());
+        $this->assertEquals('md', $items[0]->getContentExtension());
+        $this->assertEquals('md', $items[1]->getContentExtension());
+    }
+
     /**
      * @expectedException RuntimeException
      * @expectedExceptionMessage Error at line 1, column 1: title cannot be empty.

@@ -21,7 +21,9 @@ use Spress\Import\Item;
  * 2. permalink
  * 3. content
  * 4. published_at
- * 5. markup (e.g: "html" or "md"). "md" by default.
+ * 5. categories: a list of terms separated by comma. e.g: "news,events".
+ * 6. tags: a list of terms separated by comma.
+ * 7. markup (e.g: "html" or "md"). "md" by default.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -48,6 +50,8 @@ class CsvProvider implements ProviderInterface
      *  - enclosure_character (string): Sets the enclousure character. '"' by
      *      default.
      *  - escape_character (string): Sets the escape character. '\' by default.
+     *    Warning: str_getcsv function stills with a bug related with the escape character
+     *      after more than four years. @link https://bugs.php.net/bug.php?id=55413
      *  - no_header (bool): Indicates if the first row is considered as header.
      *      false by default.
      *
@@ -74,8 +78,13 @@ class CsvProvider implements ProviderInterface
         $isFirstRow = true;
         $reader = $this->buildCsvReader();
 
-        $keys = ['title', 'permalink', 'content', 'published_at', 'markup'];
-        $rows = $reader->fetchAssoc($keys);
+        $rows = $reader->fetchAssoc([
+            'title',
+            'permalink',
+            'content',
+            'published_at',
+            'markup',
+        ]);
 
         foreach ($rows as $row) {
             if ($this->options['no_header'] == false && $isFirstRow == true) {
@@ -110,13 +119,15 @@ class CsvProvider implements ProviderInterface
 
     private function resolveCsvRow(array $data, $line)
     {
-        $resolved = array_replace([
+        /*$resolved = array_replace([
             'title',
             'permalink',
             'content',
             'published_at',
+            'categories' => [],
+            'tags' => [],
             'markup' => 'md',
-        ], $data);
+        ], $data);*/
 
         if (empty($data['title'])) {
             throw new \RuntimeException(sprintf('Error at line %d, column 1: title cannot be empty.', $line));
@@ -202,6 +213,6 @@ class CsvProvider implements ProviderInterface
 
     private function normalize($data)
     {
-        return trim($data);
+        return preg_replace('/ {2,}/', ' ', trim($data));
     }
 }
