@@ -15,7 +15,28 @@ use Spress\Import\Provider\CsvProvider;
 
 class CsvProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetItemsStringCsv()
+    public function testsGetItemsCsvFile()
+    {
+        $provider = new CsvProvider();
+        $provider->setUp(['file' => __DIR__.'/../fixtures/posts.csv']);
+        $items = $provider->getItems();
+
+        $this->assertContainsOnlyInstancesOf('Spress\Import\Item', $items);
+        $this->assertCount(2, $items);
+        $this->assertEquals('Hello', $items[0]->getTitle());
+        $this->assertEquals('http://mysite.com/posts/hello', $items[0]->getPermalink());
+        $this->assertEquals('The content', $items[0]->getContent());
+        $this->assertEquals(new \DateTime('2016-07-27'), $items[0]->getDate());
+        $this->assertEquals('md', $items[0]->getContentExtension());
+
+        $this->assertEquals('Welcome', $items[1]->getTitle());
+        $this->assertEquals('http://mysite.com/posts/welcome', $items[1]->getPermalink());
+        $this->assertEquals('Welcome to Spress', $items[1]->getContent());
+        $this->assertEquals(new \DateTime('2016-07-26'), $items[1]->getDate());
+        $this->assertEquals('md', $items[1]->getContentExtension());
+    }
+
+    public function testGetItemsCsvString()
     {
         $csv = <<<EOF
         title,permalink,content,published_at
@@ -167,5 +188,15 @@ EOF;
         $provider = new CsvProvider();
         $provider->setUp(['content' => $csv, 'no_header' => true]);
         $items = $provider->getItems();
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessageRegExp /not found./
+     */
+    public function testCsvFileNotFound()
+    {
+        $provider = new CsvProvider();
+        $provider->setUp(['file' => __DIR__.'/../fixtures/not-found-file.csv']);
     }
 }
