@@ -8,8 +8,8 @@ This plugin let you import posts and pages from others platforms to a Spress sit
 frecuenly without notice until it reaches a stable version.
 
 ## Platforms supported
-* CSV files.
-* Wordpress WXR files.
+* [CSV files](#csv-files).
+* [Wordpress WXR files](#wordpress-wxr-files).
 
 # Requirements
 * php >= 5.5.
@@ -40,6 +40,12 @@ no_html_extension: true
 
 ### CSV files
 This command imports posts from a CSV file.
+
+The sign of `import:csv` command is the following:
+
+```bash
+import:csv [--dry-run] [--post-layout POST-LAYOUT] [--not-replace-urls] [--not-header] [--delimiter-character DELIMITER-CHARACTER] [--enclosure-character ENCLOSURE-CHARACTER] [--] <file>
+```
 
 Example of use:
 ```bash
