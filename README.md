@@ -44,8 +44,21 @@ This command imports posts from a CSV file.
 The sign of `import:csv` command is the following:
 
 ```bash
-import:csv [--dry-run] [--post-layout POST-LAYOUT] [--not-replace-urls] [--not-header] [--delimiter-character DELIMITER-CHARACTER] [--enclosure-character ENCLOSURE-CHARACTER] [--] <file>
+import:csv [--dry-run] [--post-layout POST-LAYOUT] [--not-replace-urls] [--not-header] [--delimiter-character DELIMITER-CHARACTER] [--enclosure-character ENCLOSURE-CHARACTER]
+[--terms_delimiter_character TERMS-DELIMITER-CHARACTER] [--] <file>
 ```
+
+Your CSV fill will be read in with the following columns:
+
+1. **title**
+2. **permalink**
+3. **content**
+4. **published_at**
+5. **categories** (optional): a list of terms separated by semicolon. e.g:
+"news;events".
+6. **tags** (optional): a list of terms separated by semicolon.
+7. **markup** (optional) markup language used in content. e.g: "md", "html".
+"md" by default. This value will be used as filename's extension of the imported item.
 
 Example of use:
 ```bash
@@ -58,6 +71,7 @@ $ spress import:csv /path-to/post.csv --post-layout=post
 * `--not-header`: First row won't be treated as header.
 * `--delimiter-character`: Sets the delimiter character. character `,` by default.
 * `--enclosure-character`: Sets the enclousure character. character `"` by default.
+* `--terms_delimiter_character`: Sets the delimiter character applied to terms in categories and tags columns.
 
 
 ### WXR files from Wordpress
