@@ -81,7 +81,7 @@ EOF;
     {
         $csv = <<<EOF
         Hello,"http://mysite.com/posts/hello",The content,2016-07-27
-        Welcome,"http://mysite.com/posts/welcome",Welcome to Spress,2016-07-26,html
+        Welcome,"http://mysite.com/posts/welcome",Welcome to Spress,2016-07-26,,,html
 EOF;
         $provider = new CsvProvider();
         $provider->setUp(['content' => $csv, 'not_header' => true]);
@@ -89,6 +89,27 @@ EOF;
 
         $this->assertCount(2, $items);
         $this->assertEquals('md', $items[0]->getContentExtension());
+        $this->assertEquals('html', $items[1]->getContentExtension());
+    }
+
+    public function testTagsAndCategories()
+    {
+        $csv = <<<EOF
+        Hello,"http://mysite.com/posts/hello",The content,2016-07-27,news;events
+        Welcome,"http://mysite.com/posts/spress-con",Spress Con,2016-07-26,news;events,conference,html
+EOF;
+        $provider = new CsvProvider();
+        $provider->setUp(['content' => $csv, 'not_header' => true]);
+        $items = $provider->getItems();
+
+        $this->assertCount(2, $items);
+        $this->assertEquals([
+            'categories' => ['news', 'events'],
+        ], $items[0]->getAttributes());
+        $this->assertEquals([
+            'categories' => ['news', 'events'],
+            'tags' => ['conference'],
+        ], $items[1]->getAttributes());
         $this->assertEquals('html', $items[1]->getContentExtension());
     }
 
@@ -128,10 +149,27 @@ EOF;
         $items = $provider->getItems();
 
         $this->assertCount(2, $items);
-        $this->assertEquals('Hello', $items[0]->getTitle());
-        $this->assertEquals('Welcome', $items[1]->getTitle());
-        $this->assertEquals('md', $items[0]->getContentExtension());
-        $this->assertEquals('md', $items[1]->getContentExtension());
+        $this->assertEquals('http://mysite.com/posts/hello', $items[0]->getPermalink());
+        $this->assertEquals('http://mysite.com/posts/welcome', $items[1]->getPermalink());
+    }
+
+    public function testChangeTermsDelimiterCharacter()
+    {
+        $csv = <<<EOF
+        Hello,"http://mysite.com/posts/hello",The content,2016-07-27,news|events
+EOF;
+        $provider = new CsvProvider();
+        $provider->setUp([
+            'content' => $csv,
+            'not_header' => true,
+            'terms_delimiter_character' => '|',
+        ]);
+        $items = $provider->getItems();
+
+        $this->assertCount(1, $items);
+        $this->assertEquals([
+            'categories' => ['news', 'events'],
+        ], $items[0]->getAttributes());
     }
 
     /**

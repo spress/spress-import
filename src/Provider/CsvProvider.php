@@ -21,9 +21,11 @@ use Spress\Import\Item;
  * 2. permalink
  * 3. content
  * 4. published_at
- * 5. categories: a list of terms separated by comma. e.g: "news,events".
- * 6. tags: a list of terms separated by comma.
- * 7. markup (e.g: "html" or "md"). "md" by default.
+ * 5. categories (optional): a list of terms separated by semicolon. e.g: "news;events".
+ * 6. tags (optional): a list of terms separated by semicolon.
+ * 7. markup (optional) markup language used in content. e.g: "md", "html".
+ *    "md" by default. This value will be used
+ *    as filename's extension of the imported item.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
@@ -52,6 +54,8 @@ class CsvProvider implements ProviderInterface
      *  - escape_character (string): Sets the escape character. '\' by default.
      *    Warning: str_getcsv function stills with a bug related with the escape character
      *      after more than four years. @link https://bugs.php.net/bug.php?id=55413
+     *  - terms_delimiter_character (string): Sets the terms delimiter character.
+     *      ';' by default.
      *  - not_header (bool): Indicates if the first row is considered as header.
      *      false by default.
      *
@@ -83,6 +87,8 @@ class CsvProvider implements ProviderInterface
             'permalink',
             'content',
             'published_at',
+            'categories',
+            'tags',
             'markup',
         ]);
 
@@ -100,6 +106,18 @@ class CsvProvider implements ProviderInterface
             $item->setContent($data['content']);
             $item->setTitle($data['title']);
             $item->setContentExtension($data['markup']);
+
+            $attributes = [];
+
+            if (count($data['categories']) > 0) {
+                $attributes['categories'] = $data['categories'];
+            }
+
+            if (count($data['tags']) > 0) {
+                $attributes['tags'] = $data['tags'];
+            }
+
+            $item->setAttributes($attributes);
 
             $items[] = $item;
 
@@ -119,16 +137,6 @@ class CsvProvider implements ProviderInterface
 
     private function resolveCsvRow(array $data, $line)
     {
-        /*$resolved = array_replace([
-            'title',
-            'permalink',
-            'content',
-            'published_at',
-            'categories' => [],
-            'tags' => [],
-            'markup' => 'md',
-        ], $data);*/
-
         if (empty($data['title'])) {
             throw new \RuntimeException(sprintf('Error at line %d, column 1: title cannot be empty.', $line));
         }
@@ -157,6 +165,20 @@ class CsvProvider implements ProviderInterface
             throw new \RuntimeException(sprintf('Error at line %d, column 4: published_at is not a valid date.', $line));
         }
 
+        $delimiter = $this->options['terms_delimiter_character'];
+
+        if (empty($data['categories'])) {
+            $data['categories'] = [];
+        } else {
+            $data['categories'] = explode($delimiter, $this->normalize($data['categories']));
+        }
+
+        if (empty($data['tags'])) {
+            $data['tags'] = [];
+        } else {
+            $data['tags'] = explode($delimiter, $this->normalize($data['tags']));
+        }
+
         if (empty($data['markup'])) {
             $data['markup'] = 'md';
         }
@@ -174,6 +196,7 @@ class CsvProvider implements ProviderInterface
             'delimiter_character' => ',',
             'enclosure_character' => '"',
             'escape_character' => '\\',
+            'terms_delimiter_character' => ';',
             'not_header' => false,
         ], $options);
 
@@ -181,12 +204,32 @@ class CsvProvider implements ProviderInterface
             throw new InvalidArgumentException('Expected string at "delimiter_character" option.');
         }
 
+        if (strlen($resolved['delimiter_character']) > 1) {
+            throw new InvalidArgumentException('Expected a single character at "delimiter_character" option.');
+        }
+
         if (is_string($resolved['enclosure_character']) == false) {
             throw new InvalidArgumentException('Expected string at "enclosure_character" option.');
         }
 
+        if (strlen($resolved['enclosure_character']) > 1) {
+            throw new InvalidArgumentException('Expected a single character at "enclosure_character" option.');
+        }
+
         if (is_string($resolved['escape_character']) == false) {
             throw new InvalidArgumentException('Expected string at "escape_character" option.');
+        }
+
+        if (strlen($resolved['escape_character']) > 1) {
+            throw new InvalidArgumentException('Expected a single character at "escape_character" option.');
+        }
+
+        if (is_string($resolved['terms_delimiter_character']) == false) {
+            throw new InvalidArgumentException('Expected string at "terms_delimiter_character" option.');
+        }
+
+        if (strlen($resolved['terms_delimiter_character']) > 1) {
+            throw new InvalidArgumentException('Expected a single character at "terms_delimiter_character" option.');
         }
 
         if (is_bool($resolved['not_header']) == false) {

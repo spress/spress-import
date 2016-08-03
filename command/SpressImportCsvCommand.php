@@ -27,6 +27,7 @@ class SpressImportCsvCommand extends CommandPlugin
         $definition->addOption('not-header', null, null);
         $definition->addOption('delimiter-character', null, CommandDefinition::VALUE_REQUIRED, 'Delimited character', ',');
         $definition->addOption('enclosure-character', null, CommandDefinition::VALUE_REQUIRED, 'Enclousure character', '"');
+        $definition->addOption('terms-delimiter-character', null, CommandDefinition::VALUE_REQUIRED, 'Terms delimiter character. Used in categories and tags columns', ';');
 
         return $definition;
     }
@@ -81,6 +82,7 @@ class SpressImportCsvCommand extends CommandPlugin
                 'not_header' => $header,
                 'delimiter_character' => $options['delimiter-character'],
                 'enclosure_character' => $options['enclosure-character'],
+                'terms_delimiter_character' => $options['terms-delimiter-character'],
             ]);
 
             $style->ResultItems($itemResults);
