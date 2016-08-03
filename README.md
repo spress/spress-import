@@ -57,7 +57,7 @@ $ spress import:csv /path-to/post.csv --post-layout=post
 #### Options
 * `--dry-run`: This option displays the items imported without actually modifying your site.
 * `--post-layout`: Layout applied to posts. e.g: `--post-layout=post`.
-* `--not-replace-urls`: Avoids to replace Wordpress URLs in pages and posts by local Spress URLs.
+* `--not-replace-urls`: Avoids to replace URLs in posts by local Spress URLs.
 * `--not-header`: First row won't be treated as header.
 * `--delimiter-character`: Sets the delimiter character. character `,` by default.
 * `--enclosure-character`: Sets the enclousure character. character `"` by default.
@@ -94,7 +94,7 @@ $ spress import:wordpress /path-to/my-wxr-file.xml --post-layout=post
 * `--dry-run`: This option displays the items imported without actually modifying your site.
 * `--post-layout`: Layout applied to posts. e.g: `--post-layout=post`.
 * `--fetch-images`: Fetch images used in the Wordpress blog.
-* `--not-replace-urls`: Avoids to replace Wordpress URLs in pages and posts by local Spress URLs.
+* `--not-replace-urls`: Avoids to replace Wordpress URLs in posts by local Spress URLs.
 * `--assets-dir`: Relative folder to `src` directory. `content/assets` by default.
 
 ### Item's attributes
