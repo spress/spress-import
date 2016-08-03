@@ -77,7 +77,7 @@ Your CSV file will be read in with the following columns:
 7. **markup** (optional) markup language used in content. e.g: "md", "html".
 "md" by default. This value will be used as filename's extension of the imported item.
 
-### Item attributes
+#### Item attributes
 List of attributes added by this provider to each item:
 
 * `categories`: list of terms that represents the categories.
