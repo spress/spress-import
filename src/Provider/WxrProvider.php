@@ -40,7 +40,7 @@ class WxrProvider implements ProviderInterface
     public function setUp(array $options)
     {
         if (extension_loaded('simplexml') === false) {
-            throw new \RuntimeException('SimpleXML extension not found.');
+            throw new \RuntimeException('This provider required SimpleXML PHP extension.');
         }
 
         $this->file = $options['file'];
