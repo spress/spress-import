@@ -99,7 +99,7 @@ class SpressImportWordpressCommand extends CommandPlugin
     {
         return [
             'name' => 'spress/spress-import-wordpress',
-            'description' => 'A command for importing from Wordpress blogs to Spress',
+            'description' => 'A command for importing from Wordpress',
             'author' => 'Victor Puertas',
             'license' => 'MIT',
         ];

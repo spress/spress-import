@@ -2,7 +2,7 @@
     "name": "spress/spress-import",
     "type": "spress-plugin",
     "description": "A plugin for importing from various blog platform to Spress",
-    "keywords": ["spress", "plugin"],
+    "keywords": ["spress", "plugin", "wordpress", "csv"],
     "license": "MIT",
     "authors": [
         {
