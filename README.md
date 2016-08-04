@@ -4,9 +4,6 @@ Import plugin for Spress
 
 This plugin let you import posts and pages from others platforms to a Spress site.
 
-**Note**: this plugin is in a early stage. That means that its behaviour could change
-frecuenly without notice until it reaches a stable version.
-
 ## Platforms supported
 * [CSV files](#csv-files).
 * [Wordpress WXR files](#wordpress-wxr-files).
@@ -18,7 +15,7 @@ frecuenly without notice until it reaches a stable version.
 
 ## How to install?
 1. Go to `your-spress-site/` folder.
-2. Run `composer require spress/spress-import:@dev`.
+2. Run `composer require spress/spress-import`.
 3. When you run `spress` command, import commands will be displayed under `import` namespace.
 
 ## How to use?
