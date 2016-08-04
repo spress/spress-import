@@ -122,6 +122,11 @@ class ProviderManager
         return $this->impotedItems;
     }
 
+    /**
+     * Process a list of items.
+     *
+     * @param array $items List of items.
+     */
     protected function processItems(array $items)
     {
         $this->impotedItems = [];
@@ -148,6 +153,11 @@ class ProviderManager
         }
     }
 
+    /**
+     * Process an item.
+     *
+     * @param Item $item The item.
+     */
     protected function processItem(Item $item)
     {
         switch ($item->getType()) {
@@ -163,6 +173,11 @@ class ProviderManager
         }
     }
 
+    /**
+     * Process a page item.
+     *
+     * @param Item $item The item.
+     */
     protected function processPageItem(Item $item)
     {
         $urlPath = $this->getPathFromPermalink($item->getPermalink());
@@ -201,6 +216,13 @@ class ProviderManager
         $this->impotedItems[] = $resultItem;
     }
 
+    /**
+     * Process a post item.
+     *
+     * @param Item $item The item.
+     *
+     * @throws RuntimeException If date or title are missing.
+     */
     protected function processPostItem(Item $item)
     {
         if (is_null($item->getDate())) {
@@ -238,6 +260,11 @@ class ProviderManager
         $this->impotedItems[] = $resultItem;
     }
 
+    /**
+     * Process a resource item. e.g: an image.
+     *
+     * @param Item $item The item.
+     */
     protected function processResourceItem(Item $item)
     {
         if ($this->fetchResources == false) {
@@ -265,6 +292,9 @@ class ProviderManager
         $this->impotedItems[] = $resultItem;
     }
 
+    /**
+     * Replaces source URLs by Spress URLs at content.
+     */
     protected function replaceSourceUrlsPostAndPages()
     {
         $urlsSourcePermalinks = [];

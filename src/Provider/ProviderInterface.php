@@ -12,7 +12,12 @@
 namespace Spress\Import\Provider;
 
 /**
- * Iterface for a provider.
+ * Iterface for a provider. The goal of a provider is to bring items to
+ * provider manager. Items contain information such as permalink or content.
+ * The provider manager doesn't apply any transformation over the content.
+ * Therefore, a provider should apply transformations as many time as necessary
+ * in order to adapt the content. Stuff such as replaces permalinks in content
+ * or sets the item's layout are responsibility  of provider manager.
  *
  * @author Victor Puertas <vpgugr@gmail.com>
  */
